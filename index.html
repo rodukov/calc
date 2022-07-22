@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Calc</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap');
+            html, body {
+                /* background-color: rgb(31, 31, 31); */
+                background-color: inherit;
+                background-color: rgba(43, 43, 43, 0.002);
+                margin: 0;
+                height: 100vh;
+            }
+            .result_place {
+                height: 30%;
+            }
+            .calc_place {
+                display: grid;
+                grid-template-columns: 25% 25% 25% 25%;
+                margin-top: 2px;
+                height: 69%;
+                margin-left: 4px;
+                margin-right: 4px;
+
+            }
+            .calc_place_container {
+                
+                border-radius: 6px;
+                margin: 2px;
+                font-family: 'arial';
+                color: white;
+                font-size: 22px;
+                transition: .08s;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+            }
+            .numbers:hover { background: rgb(78, 78, 78); }
+            .numbers { background: rgb(56, 56, 56); }
+            .mathbtn:hover { background: rgb(82, 75, 75); }
+            .mathbtn { background: rgb(54, 50, 50); }
+
+            #equal { background:  rgb(255, 151, 32); }
+
+            .result_place {
+                position: relative;
+                -webkit-user-select: none;
+                user-select: none;
+                -webkit-app-region: drag;
+            }
+            .result_p {
+                font-family: 'Noto Sans', sans-serif;
+                color: white;
+                margin: 0;
+                font-weight: 600;
+                font-size: 50px;
+                position: absolute;
+                bottom: 0; right:0;
+                margin-bottom: 50px;
+                margin-right: 10px;
+            }
+            .last_p {
+                font-size: 25px;
+                font-family: 'Noto Sans', sans-serif;
+                letter-spacing: 1px;
+                font-weight: 400;
+                color: gray;
+                position: absolute;
+                bottom: 0; right:0;
+                margin-bottom: 121px;
+                margin-right: 10px;               
+            }
+            @keyframes identifier {
+                from {
+                    opacity: 0;
+                    transform: translateY(40px) scale(0.4);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0px) scale(1);
+                }
+            }
+            .unselectable {
+                -moz-user-select: -moz-none;
+                -khtml-user-select: none;
+                -webkit-user-select: none;
+                -o-user-select: none;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body style="border-radius: 15px; background-color: rgba(34, 33, 33, 1); ">
+        <div class="result_place">
+            <p class="last_p" id="last">0+0=</p>     
+            <p class="result_p" id="result">0</p>     
+        </div>
+        <div class="calc_place">
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">(</a></div>
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">)</a></div>
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">C</a></div>
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">←</a></div>
+
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">^</a></div>
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">x²</a></div>
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">√x</a></div>
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">÷</a></div>
+
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">7</a></div>
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">8</a></div>
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">9</a></div>
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">×</a></div>
+
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">4</a></div>
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">5</a></div>
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">6</a></div>
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">-</a></div>
+
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">1</a></div>
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">2</a></div>
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">3</a></div>
+            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">+</a></div>
+
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">±</a></div>
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">0</a></div>
+            <div class="calc_place_container numbers"><a class="calc_item unselectable">.</a></div>
+            <div class="calc_place_container" id="equal"><a class="calc_item unselectable">=</a></div>
+        </div>
+
+        <script type="text/javascript">
+            String.prototype.allReplace = function(obj) {
+                var retStr = this;
+                for (var x in obj) {
+                    retStr = retStr.replace(new RegExp(x, 'g'), obj[x]);
+                }
+                return retStr;
+            }
+            const animate = () => {
+                let elem = document.getElementById('result')
+                elem.style.animation = 'identifier .3s'
+                setTimeout(() => elem.style.animation = 'none', 300) 
+            }
+            document.addEventListener('click', function(e) {
+                e = e || window.event;
+                var target = e.target || e.srcElement, text = target.textContent || target.innerText;
+                if (text == 'C' || text == 'CE') {
+                    document.getElementById('result').innerText = 0
+                    animate()
+                } else if (text == '±') {
+                    document.getElementById('result').innerText = (-parseFloat(document.getElementById('result').innerText)).toString()
+                    animate()
+                } else if (text == '←') {
+                    document.getElementById('result').innerText = (document.getElementById('result').innerText).slice(0, -1)
+                    animate()
+                } else if(text == '=') {
+                    document.getElementById('last').innerText = document.getElementById('result').innerText + '='
+                    document.getElementById('result').innerText = eval(
+                        document.getElementById('result').innerText.replace('÷', '/').replace('×', '*').replace('^', '**').replace('²', '**2')
+                    )
+                    animate()
+                    
+                } else if (['1','2','3','4','5','6','7','8','9','+','-','×','÷','^','(',')','.'].includes(text)){
+                    if (document.getElementById('result').innerText[0] == '0') {
+                        document.getElementById('result').innerText = ''
+                    } 
+                    document.getElementById('result').innerText += text
+                } else if (text == 'x²') { document.getElementById('result').innerText += '²'; }
+                else if (text == '√x'){
+                    document.getElementById('result').innerText = Math.sqrt(parseFloat(document.getElementById('result').innerText)).toString();
+                    animate() }
+                
+
+            }, false);
+        </script>
+    </body>
+</html>
