@@ -24,5 +24,8 @@
   "dependencies": {
     "electron": "^19.0.9",
     "electron-acrylic-window": "^0.5.11"
+  },
+  "devDependencies": {
+    "electron-packager": "^15.5.1"
   }
 }

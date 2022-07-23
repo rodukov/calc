@@ -25,7 +25,20 @@
 
             }
             .calc_place_container {
-                
+                border-radius: 6px;
+                margin: 2px;
+                font-family: 'arial';
+                color: white;
+                font-size: 28px;
+                font-weight: 900;
+                transition: .08s;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+            }
+            .calc_place_container_min {
                 border-radius: 6px;
                 margin: 2px;
                 font-family: 'arial';
@@ -36,20 +49,22 @@
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
-                align-items: center;
+                align-items: center;               
             }
+
             .numbers:hover { background: rgb(78, 78, 78); }
-            .numbers { background: rgb(56, 56, 56); }
+            .numbers { background: rgb(56, 56, 56); border: 1px solid rgb(63, 63, 63);}
             .mathbtn:hover { background: rgb(82, 75, 75); }
             .mathbtn { background: rgb(54, 50, 50); }
+
+            .calc_place_container:active { background: linear-gradient(115deg, rgb(105, 96, 96), rgb(163, 146, 146)); }
+            .calc_place_container_min:active { background: linear-gradient(115deg, rgb(105, 96, 96), rgb(129, 116, 116)); }
 
             #equal { background:  rgb(255, 151, 32); }
 
             .result_place {
                 position: relative;
-                -webkit-user-select: none;
-                user-select: none;
-                -webkit-app-region: drag;
+
             }
             .result_p {
                 font-family: 'Noto Sans', sans-serif;
@@ -83,6 +98,15 @@
                     transform: translateY(0px) scale(1);
                 }
             }
+            @keyframes hide {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                    display: none;
+                }
+            }
             .unselectable {
                 -moz-user-select: -moz-none;
                 -khtml-user-select: none;
@@ -90,46 +114,171 @@
                 -o-user-select: none;
                 user-select: none;
             }
+
+            .headers {
+                position: absolute;
+                z-index: 15;
+                display: flex;
+            }
+            .page_name {
+                color: white;
+                font-size: 25px;
+                font-family: 'Noto Sans', sans-serif;
+                font-weight: 900;
+                margin-left: 90px;
+                margin-top: 43px;
+
+            }
+            #btnMenu {
+                height: 70px;
+                width: 70px;
+                position: fixed;
+                top: 61px;
+                left: 40px;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                transition: all 0.3s linear;
+                cursor: pointer;
+                z-index: 999;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            #btnMenu:hover {
+                background: rgba(141, 120, 62, 0.4);
+                transition: all 0.3s ease-in-out;
+            }
+            #btnMenu div {
+                height: 3px;
+                width: 50%;
+                margin: 3px 25%;
+                background: #999999;
+                transition: all 0.2s linear;
+            }
+            #btnMenu.clicked {
+                background: rgba(251, 194, 117, 0.4);
+            }
+            #btnMenu.clicked div {
+                background: white;
+                position: absolute;
+                transition: all 0.2s linear;
+            }
+            #btnMenu.clicked div:first-child {
+                transform: rotate(45deg);
+            }
+            #btnMenu.clicked div:not(:first-child):not(:last-child) {
+                transform: translateX(-200px);
+
+            }
+            #btnMenu.clicked div:last-child {
+                transform: rotate(-45deg);
+            }
+            .frame {
+                position: absolute;
+                width: 100%;
+                z-index: 100;
+                height: 20px;
+                background: rgb(41, 41, 41);
+                border-radius: 15px 15px 0px 0px;
+                -webkit-user-select: none;
+                -webkit-app-region: drag;
+            }
+            .items {
+                position: relative;
+                margin-left: auto;
+                margin-right: 10px;
+                align-items: right;
+                justify-content: right;
+                display: flex;
+            }
+            .img {
+                width: 16px;
+                height: 16px;
+                filter: invert(80%);
+                margin: 0;
+                transform: translateY(2px);
+                -webkit-app-region: no-drag;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -o-user-select: none;
+                user-select: none;
+                transition: .1s;
+            }
+            #close {
+                filter: invert(70%);
+            }
+            #close:hover {
+                filter: invert(80%);
+            }
+            .img:hover {
+                filter: invert(100%);
+            }
         </style>
     </head>
     <body style="border-radius: 15px; background-color: rgba(34, 33, 33, 1); ">
+        <div class="frame">
+            <div class="items">
+                <p style="margin: 0; text-align: right;"><img class="img unselectable" src="assets/src/frame/minus.png"></p>
+                <p style="margin: 0; text-align: right; margin-left: 13px; margin-right: 13px; "><img class="img unselectable" src="assets/src/frame/resize1.png"></p>
+                <p style="margin: 0; text-align: right;"><img class="img unselectable" id="close" onclick="close_program()" src="assets/src/frame/close.svg"></p>
+            </div>
+        </div>
+        <div class="headers">
+            <div id="btnMenu">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            <p class="page_name unselectable">Rodukov's Calculator</p>
+        </div>
         <div class="result_place">
-            <p class="last_p" id="last">0+0=</p>     
-            <p class="result_p" id="result">0</p>     
+            <p class="last_p unselectable" id="last">0+0=</p>     
+            <p class="result_p unselectable" id="result">0</p>     
         </div>
         <div class="calc_place">
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">(</a></div>
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">)</a></div>
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">C</a></div>
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">←</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">(</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">)</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">C</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">←</a></div>
 
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">^</a></div>
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">x²</a></div>
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">√x</a></div>
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">÷</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">^</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">x²</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">√x</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">÷</a></div>
 
             <div class="calc_place_container numbers"><a class="calc_item unselectable">7</a></div>
             <div class="calc_place_container numbers"><a class="calc_item unselectable">8</a></div>
             <div class="calc_place_container numbers"><a class="calc_item unselectable">9</a></div>
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">×</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">×</a></div>
 
             <div class="calc_place_container numbers"><a class="calc_item unselectable">4</a></div>
             <div class="calc_place_container numbers"><a class="calc_item unselectable">5</a></div>
             <div class="calc_place_container numbers"><a class="calc_item unselectable">6</a></div>
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">-</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">-</a></div>
 
             <div class="calc_place_container numbers"><a class="calc_item unselectable">1</a></div>
             <div class="calc_place_container numbers"><a class="calc_item unselectable">2</a></div>
             <div class="calc_place_container numbers"><a class="calc_item unselectable">3</a></div>
-            <div class="calc_place_container mathbtn"><a class="calc_item unselectable">+</a></div>
+            <div class="calc_place_container_min mathbtn"><a class="calc_item unselectable">+</a></div>
 
-            <div class="calc_place_container numbers"><a class="calc_item unselectable">±</a></div>
+            <div class="calc_place_container_min numbers"><a class="calc_item unselectable">±</a></div>
             <div class="calc_place_container numbers"><a class="calc_item unselectable">0</a></div>
-            <div class="calc_place_container numbers"><a class="calc_item unselectable">.</a></div>
-            <div class="calc_place_container" id="equal"><a class="calc_item unselectable">=</a></div>
+            <div class="calc_place_container_min numbers"><a class="calc_item unselectable">.</a></div>
+            <div class="calc_place_container_min" id="equal"><a class="calc_item unselectable">=</a></div>
         </div>
 
         <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector("#btnMenu").onclick = function () {
+                this.classList.toggle("clicked");
+            };
+        });
+            function close_program(){
+                const { app, BrowserWindow } = require('electron')
+
+                win.maximize();
+            }
             String.prototype.allReplace = function(obj) {
                 var retStr = this;
                 for (var x in obj) {
@@ -142,6 +291,7 @@
                 elem.style.animation = 'identifier .3s'
                 setTimeout(() => elem.style.animation = 'none', 300) 
             }
+
             document.addEventListener('click', function(e) {
                 e = e || window.event;
                 var target = e.target || e.srcElement, text = target.textContent || target.innerText;
