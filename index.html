@@ -15,6 +15,16 @@
             .result_place {
                 height: 30%;
             }
+            @keyframes show_in {
+                0% {
+                    transform: scale(0.7) translateY(40px);
+                    opacity: 0;
+                }
+                100% {
+                    transform: scale(1) translateY(0px);
+                    opacity: 1;
+                }
+            }
             .calc_place {
                 display: grid;
                 grid-template-columns: 25% 25% 25% 25%;
@@ -22,6 +32,7 @@
                 height: 69%;
                 margin-left: 4px;
                 margin-right: 4px;
+                animation: show_in .4s;
 
             }
             .calc_place_container {
@@ -60,7 +71,9 @@
             .calc_place_container:active { background: linear-gradient(115deg, rgb(105, 96, 96), rgb(163, 146, 146)); }
             .calc_place_container_min:active { background: linear-gradient(115deg, rgb(105, 96, 96), rgb(129, 116, 116)); }
 
-            #equal { background:  rgb(255, 151, 32); }
+            #equal { background:  rgb(255, 151, 32); transition: .1s;}
+            #equal:hover { background:  rgb(247, 144, 27)}
+            #equal:active { background: linear-gradient(114deg, rgb(255, 151, 32), rgb(255, 166, 65)) }
 
             .result_place {
                 position: relative;
@@ -117,7 +130,6 @@
 
             .headers {
                 position: absolute;
-                z-index: 15;
                 display: flex;
             }
             .page_name {
@@ -127,6 +139,7 @@
                 font-weight: 900;
                 margin-left: 90px;
                 margin-top: 43px;
+                z-index: 1;
 
             }
             #btnMenu {
@@ -145,18 +158,18 @@
                 justify-content: center;
             }
             #btnMenu:hover {
-                background: rgba(141, 120, 62, 0.4);
+                background: rgba(58, 58, 58, 0.562);
                 transition: all 0.3s ease-in-out;
             }
             #btnMenu div {
                 height: 3px;
                 width: 50%;
                 margin: 3px 25%;
-                background: #999999;
+                background: #aaaaaa;
                 transition: all 0.2s linear;
             }
-            #btnMenu.clicked {
-                background: rgba(251, 194, 117, 0.4);
+            #btnMenu.clicked { /* circle */
+                background: rgba(255, 169, 56, 0.9)
             }
             #btnMenu.clicked div {
                 background: white;
@@ -167,7 +180,7 @@
                 transform: rotate(45deg);
             }
             #btnMenu.clicked div:not(:first-child):not(:last-child) {
-                transform: translateX(-200px);
+                transform: translateX(-90px);
 
             }
             #btnMenu.clicked div:last-child {
@@ -214,13 +227,26 @@
             .img:hover {
                 filter: invert(100%);
             }
+            #awesome_header {
+                position: absolute;
+                z-index: 10;
+                height: 95.3%;
+                width: 87%;
+                background: rgba(31, 31, 31, 0.45);
+                backdrop-filter: blur(20px);
+                border-radius: 0px 0px 15px 0px;
+                transition: .3s;
+                margin-top: 10px;
+                transform: translateX(-1000px);
+                box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.3);
+            }
         </style>
     </head>
     <body style="border-radius: 15px; background-color: rgba(34, 33, 33, 1); ">
         <div class="frame">
             <div class="items">
-                <p style="margin: 0; text-align: right;"><img class="img unselectable" src="assets/src/frame/minus.png"></p>
-                <p style="margin: 0; text-align: right; margin-left: 13px; margin-right: 13px; "><img class="img unselectable" src="assets/src/frame/resize1.png"></p>
+                <p style="margin: 0; text-align: right;"><img class="img unselectable" src="assets/src/frame/minus.png" onclick="minimize_program()"></p>
+                <p style="margin: 0; text-align: right; margin-left: 13px; margin-right: 13px; "><img onclick="maximize_program()" class="img unselectable" src="assets/src/frame/resize1.png"></p>
                 <p style="margin: 0; text-align: right;"><img class="img unselectable" id="close" onclick="close_program()" src="assets/src/frame/close.svg"></p>
             </div>
         </div>
@@ -230,7 +256,10 @@
                 <div></div>
                 <div></div>
               </div>
-            <p class="page_name unselectable">Rodukov's Calculator</p>
+            <p class="page_name unselectable">Standart</p>
+        </div>
+        <div id="awesome_header">
+            <p>test</p>
         </div>
         <div class="result_place">
             <p class="last_p unselectable" id="last">0+0=</p>     
@@ -269,16 +298,28 @@
         </div>
 
         <script type="text/javascript">
+            let header_status = true
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelector("#btnMenu").onclick = function () {
-                this.classList.toggle("clicked");
+                this.classList.toggle("clicked")
+                if (header_status) {
+                    document.getElementById('awesome_header').style.transform = "translateX(0px)"
+                } else {
+                    document.getElementById('awesome_header').style.transform = "translateX(-1000px)"
+                }
+                header_status = !header_status
+
             };
         });
             function close_program(){
-                const { app, BrowserWindow } = require('electron')
-
-                win.maximize();
+                alert('close')
             }
+            function minimize_program(){
+                alert('minimize')
+            }
+            function maximize_program(){
+                alert('maximize')
+            }           
             String.prototype.allReplace = function(obj) {
                 var retStr = this;
                 for (var x in obj) {
