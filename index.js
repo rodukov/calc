@@ -1,5 +1,7 @@
+const { rejects } = require('assert')
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
+
 
 const createWindow = () => {
     
@@ -25,6 +27,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
     createWindow()
 })
+
 
 
 
