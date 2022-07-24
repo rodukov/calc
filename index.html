@@ -14,6 +14,7 @@
             }
             .result_place {
                 height: 30%;
+                animation: show_in_backwards .3s;
             }
             @keyframes show_in {
                 0% {
@@ -22,6 +23,16 @@
                 }
                 100% {
                     transform: scale(1) translateY(0px);
+                    opacity: 1;
+                }
+            }
+            @keyframes show_in_backwards {
+                0% {
+                    transform: translateY(-40px);
+                    opacity: 0;
+                }
+                100% {
+                    transform: translateY(0px);
                     opacity: 1;
                 }
             }
@@ -230,15 +241,39 @@
             #awesome_header {
                 position: absolute;
                 z-index: 10;
-                height: 95.3%;
-                width: 87%;
+                height: 97.1%;
+                width: 280px;
                 background: rgba(31, 31, 31, 0.45);
                 backdrop-filter: blur(20px);
                 border-radius: 0px 0px 15px 0px;
                 transition: .3s;
                 margin-top: 10px;
                 transform: translateX(-1000px);
-                box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.3);
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+            }
+            .body_header {
+                margin-top: 100px;
+                width: 100%;
+                height: 86.75%;
+            }
+            .mainh {
+                font-family: 'Noto Sans';
+                font-weight: 900;
+                color: white;
+                font-size: 18px;
+                margin: 0; padding: 0;
+                margin-top: 10px;
+                margin-left: 15px;
+            }
+            .desch {
+                margin: 0; padding: 0;
+                font-family: 'Arial';
+                color: white;
+                font-size: 18px;
+                margin-top: 10px;
+                margin-left: 50px;
+                font-weight: 100;
+                letter-spacing: 1px;
             }
         </style>
     </head>
@@ -259,7 +294,17 @@
             <p class="page_name unselectable">Standart</p>
         </div>
         <div id="awesome_header">
-            <p>test</p>
+            <div class="body_header">
+                <p class="mainh">Calculator</p>
+                    <p class="desch">Standart</p>
+                    <p class="desch">Scientific</p>
+                <p class="mainh">Converter</p>
+                    <p class="desch">Volume</p>
+                    <p class="desch">Lenght</p>
+                    <p class="desch">Weight and Mass</p>
+                <p class="mainh">About</p>
+                    <a class="desch" href="https://github.com/rodukov/">GitHub</a>
+            </div>
         </div>
         <div class="result_place">
             <p class="last_p unselectable" id="last">0+0=</p>     
@@ -298,6 +343,7 @@
         </div>
 
         <script type="text/javascript">
+            
             let header_status = true
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelector("#btnMenu").onclick = function () {
@@ -311,8 +357,12 @@
 
             };
         });
+
             function close_program(){
                 alert('close')
+                alert(console.log(require("electron").remote))
+                alert(require("electron").remote.BrowserWindow.getAllWindows()[0])
+
             }
             function minimize_program(){
                 alert('minimize')

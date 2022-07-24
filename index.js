@@ -11,6 +11,13 @@ const createWindow = () => {
       autoHideMenuBar: true,
       transparent: true,
       frame: false,
+      webPreferences: {
+        nodeIntegration: true, 
+        enableRemoteModule: true,
+        contextIsolation: false,
+        enableRemoteModule: true,
+        sandbox: false
+    }
     })
     win.loadFile('index.html')
     win.setBackgroundColor('rgba(0, 0, 0, 0)')
@@ -18,4 +25,6 @@ const createWindow = () => {
 app.whenReady().then(() => {
     createWindow()
 })
+
+
 
